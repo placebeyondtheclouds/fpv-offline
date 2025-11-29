@@ -31,10 +31,6 @@ docker compose up --build --force-recreate bluejay
 
 docker compose up homepage
 
-export http_proxy=http://192.168.100.175:7897
-export https_proxy=http://192.168.100.175:7897
-export all_proxy=socks5://192.168.100.175:7897
-
 docker builder prune
 
 docker compose up --build --force-recreate copier
