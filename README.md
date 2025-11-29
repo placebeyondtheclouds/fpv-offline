@@ -2,6 +2,10 @@
 
 rename `sample.env` to `.env`, setup variables in `.env`. use proxy, can be blank
 
+## the host
+
+Ubuntu with docker. here are the [instructions how to install docker on debian](https://github.com/placebeyondtheclouds/gpu-home-server?tab=readme-ov-file#continue-setting-up-the-debian-lxc-with-gpu-enabled-docker). for ubuntu just replace `debian` with `ubuntu` in one command
+
 ## start everything
 
 ```
@@ -11,7 +15,7 @@ docker compose up
 
 navigate to http://localhost:81
 
-the files are in `./fw`
+the firmware files are in `./fw`
 
 ## dev
 

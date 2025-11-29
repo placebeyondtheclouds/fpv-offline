@@ -28,4 +28,4 @@ if ! make arm_sdk_install; then rm -rf /opt/betaflight/downloads && make arm_sdk
 
 make $BETAFLIGHT_FW_TARGET EXTRA_FLAGS="-D'RELEASE_NAME=$BETAFLIGHT_VERSION' $BETAFLIGHT_FW_EXTRA_FLAGS" -j
 
-cp -r /opt/betaflight/obj/* /fw
+cp -r /opt/betaflight/obj/*.hex /fw
