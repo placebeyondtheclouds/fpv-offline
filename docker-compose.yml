@@ -1,0 +1,178 @@
+name: "fpv-offline"
+
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: localhost:81
+      HOMEPAGE_VAR_BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
+      HOMEPAGE_VAR_BETAFLIGHT_FW_TARGET: ${BETAFLIGHT_FW_TARGET}
+      HOMEPAGE_VAR_BLUEJAY_TARGET: ${BLUEJAY_TARGET}
+      HOMEPAGE_VAR_BLUEJAY_PWM: ${BLUEJAY_PWM}
+    ports:
+      - 81:3000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - homepage_data:/app/config:rw
+    restart: unless-stopped
+
+  copier:
+    image: alpine:latest
+    entrypoint: /bin/sh
+    command: -c "cp -r /local/homepage/config/* /app/config/  && cp /local/fw.sh /betaflight/fw.sh && cp /local/bf-conf.sh /configurator-betaflight/bf-conf.sh && cp /local/esc-conf.sh /configurator-esc/esc-conf.sh && cp /local/bluejay.sh /bluejay/bluejay.sh&& cp /local/elrs-conf.sh /configurator-elrs/elrs-conf.sh"
+    container_name: copier
+    restart: no
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - homepage_data:/app/config:rw
+      - .:/local:ro
+      - betaflight-fw_data:/betaflight:rw
+      - configurator-betaflight_data:/configurator-betaflight:rw
+      - configurator-esc_data:/configurator-esc:rw
+      - configurator-elrs_data:/configurator-elrs:rw
+      - bluejay_data:/bluejay:rw
+
+  betaflight-fw:
+    build:
+      context: .
+      dockerfile: Dockerfile-betaflight-fw
+      args:
+        COUNTRY: ${COUNTRY}
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+      BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
+      BETAFLIGHT_BRANCH: ${BETAFLIGHT_BRANCH}
+      BETAFLIGHT_FW_TARGET: ${BETAFLIGHT_FW_TARGET}
+      BETAFLIGHT_FW_EXTRA_FLAGS: ${BETAFLIGHT_FW_EXTRA_FLAGS}
+      ARM_SDK_DIR: "/usr/"
+      DEBIAN_FRONTEND: noninteractive
+      TZ: Asia/Shanghai
+    container_name: betaflight-fw
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - betaflight-fw_data:/opt:rw
+      - ./fw:/fw:rw
+    restart: no
+    command: bash -c "chmod u+x fw.sh && ./fw.sh"
+
+  configurator-betaflight:
+    build:
+      context: .
+      dockerfile: Dockerfile-configurator
+      args:
+        COUNTRY: ${COUNTRY}
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+      BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
+      BETAFLIGHT_BRANCH: ${BETAFLIGHT_BRANCH}
+      DEBIAN_FRONTEND: noninteractive
+      TZ: Asia/Shanghai
+      NVM_DIR: /root/.nvm
+    container_name: configurator-betaflight
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - configurator-betaflight_data:/opt:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev:/dev
+      - /run/udev:/run/udev:ro
+    restart: unless-stopped
+    ports:
+      - 82:8080
+    command: bash -c "chmod u+x bf-conf.sh &&  ./bf-conf.sh"
+
+  configurator-esc:
+    build:
+      context: .
+      dockerfile: Dockerfile-configurator
+      args:
+        COUNTRY: ${COUNTRY}
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+      DEBIAN_FRONTEND: noninteractive
+      TZ: Asia/Shanghai
+      NVM_DIR: /root/.nvm
+    container_name: configurator-esc
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - configurator-esc_data:/opt:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev:/dev
+      - /run/udev:/run/udev:ro
+    restart: unless-stopped
+    ports:
+      - 83:3000
+    command: bash -c "chmod u+x esc-conf.sh &&  ./esc-conf.sh"
+
+  # configurator-elrs:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-configurator
+  #     args:
+  #       COUNTRY: ${COUNTRY}
+  #       HTTP_PROXY: ${HTTP_PROXY}
+  #       HTTPS_PROXY: ${HTTPS_PROXY}
+  #       ALL_PROXY: ${ALL_PROXY}
+  #   environment:
+  #     HTTP_PROXY: ${HTTP_PROXY}
+  #     HTTPS_PROXY: ${HTTPS_PROXY}
+  #     ALL_PROXY: ${ALL_PROXY}
+  #     DEBIAN_FRONTEND: noninteractive
+  #     TZ: Asia/Shanghai
+  #     NVM_DIR: /root/.nvm
+  #   container_name: configurator-elrs
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - configurator-elrs_data:/opt:rw
+  #     - /tmp/.X11-unix:/tmp/.X11-unix
+  #     - /dev:/dev
+  #     - /run/udev:/run/udev:ro
+  #   restart: unless-stopped
+  #   ports:
+  #     - 84:3000
+  #   command: bash -c "chmod u+x elrs-conf.sh &&  ./elrs-conf.sh"
+
+  bluejay:
+    build:
+      context: .
+      dockerfile: Dockerfile-bluejay
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+      BLUEJAY_TARGET: ${BLUEJAY_TARGET}
+      BLUEJAY_PWM: ${BLUEJAY_PWM}
+    container_name: bluejay
+    entrypoint: /bin/sh
+    command: -c "cd /opt && chmod u+x ./bluejay.sh && ./bluejay.sh"
+    restart: no
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - bluejay_data:/opt:rw
+      - ./fw:/fw:rw
+
+volumes:
+  homepage_data:
+    driver: local
+  betaflight-fw_data:
+    driver: local
+  configurator-betaflight_data:
+    driver: local
+  configurator-esc_data:
+    driver: local
+  configurator-elrs_data:
+    driver: local
+  bluejay_data:
+    driver: local

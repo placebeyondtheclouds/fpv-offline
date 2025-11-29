@@ -1,0 +1,18 @@
+title: FPV
+
+theme: dark # or light
+
+color: slate
+
+useEqualHeights: true
+
+layout:
+  Configurators:
+    header: true
+    style: row
+    columns: 3
+
+  Files:
+    header: true
+    style: row
+    columns: 3
