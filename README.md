@@ -6,10 +6,13 @@ rename `sample.env` to `.env`, setup variables in `.env`. use proxy, can be blan
 
 Ubuntu with docker. here are the [instructions how to install docker on debian](https://github.com/placebeyondtheclouds/gpu-home-server?tab=readme-ov-file#continue-setting-up-the-debian-lxc-with-gpu-enabled-docker). for ubuntu just replace `debian` with `ubuntu` in one command
 
+## do it once
+
+`git clone https://github.com/placebeyondtheclouds/fpv-offline.git && cd fpv-offline && chmod 766 fw`
+
 ## start everything
 
 ```
-mkdir -p fw && sudo rm -rf ./fw/* &&  chmod 777 fw
 docker compose up
 ```
 
