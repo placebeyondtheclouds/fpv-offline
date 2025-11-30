@@ -17,7 +17,17 @@ navigate to http://localhost:81
 
 the firmware files are in `./fw`
 
+## update Betaflight or Bluejay firmware targets and options
+
+just edit `.env` and restart the stack
+
+## update configurator versions
+
+`docker volume list` and then `docker volume rm xxx` delete all volumes and `docker compose up --build --force-recreate configurator-betaflight`
+
 ## dev
+
+docker compose up --remove-orphans
 
 docker compose up --build --force-recreate betaflight-fw
 

@@ -5,6 +5,7 @@ ARG COUNTRY
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 ARG ALL_PROXY
+ARG NODE_VERSION
 
 
 
@@ -28,5 +29,20 @@ WORKDIR /opt
 
 # install nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+# set env
+ENV NVM_DIR=/root/.nvm
+
+# install node
+RUN bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION"
+
+COPY  --chown=root:root --chmod=700  esc-conf.sh .
+
+RUN ./esc-conf.sh
+
+WORKDIR /opt/esc-configurator
+
+# set ENTRYPOINT for reloading nvm-environment
+ENTRYPOINT ["bash", "-c", "source $NVM_DIR/nvm.sh && exec \"$@\"", "--"]
 
 

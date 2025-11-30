@@ -26,5 +26,3 @@ npm install yarn -g
 yarn install
 
 yarn build
-
-yarn preview --host 0.0.0.0
