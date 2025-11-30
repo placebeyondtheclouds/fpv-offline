@@ -16,7 +16,7 @@ rename `sample.env` to `.env`, setup variables in `.env`. use proxy, can be blan
 docker compose up
 ```
 
-navigate to http://localhost:81
+navigate to **http://localhost:81**
 
 the firmware files are in `./fw`
 
@@ -38,7 +38,7 @@ docker system prune
 
 ## remote access
 
-on a remote machine:
+on the local machine:
 
 ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 192.168.100.175
 
