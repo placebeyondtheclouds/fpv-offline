@@ -1,14 +1,14 @@
-## setup envs
-
-rename `sample.env` to `.env`, setup variables in `.env`. use proxy, can be blank
-
 ## the host
 
-Ubuntu with docker. here are the [instructions how to install docker on debian](https://github.com/placebeyondtheclouds/gpu-home-server?tab=readme-ov-file#continue-setting-up-the-debian-lxc-with-gpu-enabled-docker). for ubuntu just replace `debian` with `ubuntu` in one command
+Ubuntu VM with docker. or baremetal windows with docker. here are the [instructions how to install docker on debian](https://github.com/placebeyondtheclouds/gpu-home-server?tab=readme-ov-file#continue-setting-up-the-debian-lxc-with-gpu-enabled-docker). for ubuntu just replace `debian` with `ubuntu` in one command
 
 ## do it once
 
-`git clone https://github.com/placebeyondtheclouds/fpv-offline.git && cd fpv-offline && chmod 766 fw`
+`git clone https://github.com/placebeyondtheclouds/fpv-offline.git && cd fpv-offline && chmod 777 fw`
+
+## setup envs
+
+rename `sample.env` to `.env`, setup variables in `.env`. use proxy, can be blank
 
 ## start everything
 
@@ -26,33 +26,21 @@ just edit `.env` and restart the stack
 
 ## update configurator versions
 
-`docker volume list` and then `docker volume rm xxx` delete all volumes and `docker compose up --build --force-recreate configurator-betaflight`
+`docker volume list` and then `docker volume rm xxx` delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-esc`
 
-## dev
+## cleanup
 
 docker compose up --remove-orphans
 
-docker compose up --build --force-recreate betaflight-fw
-
-docker compose up --build --force-recreate configurator-betaflight
-
-docker compose up --build --force-recreate configurator-esc
-
-docker compose up --build --force-recreate configurator-elrs
-
-docker compose up --build --force-recreate bluejay
-
-docker compose up homepage
-
 docker builder prune
 
-docker compose up --build --force-recreate copier
+docker system prune
 
 ## remote access
 
 on a remote machine:
 
-ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 192.168.100.175
+ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 192.168.100.175
 
 ## ref
 
