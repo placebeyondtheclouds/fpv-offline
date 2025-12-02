@@ -1,3 +1,14 @@
+## what the stack does
+
+- clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
+- downloads latest at the moment (v0.21.1-RC1) version of Bluejay firmware HEXes for the target and PWM set in `.env`
+- clones the repo for ESC Configurator and Betaflight Configurator, builds them at container image build stage
+- starts the `homepage` container for a convenient [starting page](http://localhost:81)
+
+## video on Youtube
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/1Zfap0P8PoI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## the host
 
 Ubuntu VM with docker. or baremetal windows with docker. here are the [instructions how to install docker on debian](https://github.com/placebeyondtheclouds/gpu-home-server?tab=readme-ov-file#continue-setting-up-the-debian-lxc-with-gpu-enabled-docker). for ubuntu just replace `debian` with `ubuntu` in one command
