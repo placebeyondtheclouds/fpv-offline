@@ -9,16 +9,20 @@ echo $BETAFLIGHT_VERSION
 echo $BETAFLIGHT_FW_TARGET
 echo $BETAFLIGHT_FW_EXTRA_FLAGS
 
+chown root:root /opt/ -R
+
+chmod 777 /opt/ -R
 
 if [ ! -d "/opt/betaflight" ]; then git clone https://github.com/betaflight/betaflight.git; fi
 
 cd betaflight
 
-git pull
 
-git checkout $BETAFLIGHT_BRANCH
+# git checkout $BETAFLIGHT_BRANCH
 
 git checkout tags/$BETAFLIGHT_VERSION
+
+git pull
 
 make clean
 

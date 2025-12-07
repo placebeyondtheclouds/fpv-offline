@@ -21,6 +21,21 @@ Ubuntu VM with docker. or baremetal windows with docker. here are the [instructi
 
 rename `sample.env` to `.env`, setup variables in `.env`. use proxy, can be blank
 
+- a quote from `./src/main/target/common_pre.h` on extra flags:
+
+```
+    CLOUD_BUILD is used to signify that the build is a user requested build and that the
+    features to be enabled will be defined ALREADY.
+
+    CORE_BUILD is used to signify that the build is a user requested build and that the
+    features to be enabled will be the minimal set, and all the drivers should be present.
+
+    If neither of the above are present then the build should simply be a baseline build
+    for continuous integration, i.e. the compilation of the majority of features and drivers
+    dependent on the size of the flash available.
+
+```
+
 ## start everything
 
 ```
