@@ -19,9 +19,9 @@ Ubuntu VM with docker. or baremetal windows with docker. here are the [instructi
 
 ## setup envs
 
-rename `sample.env` to `.env`, setup variables in `.env`. use proxy, can be blank
+rename `sample.env` to `.env`, setup targets and versions in the variables in `.env`. use proxy, can be blank.
 
-- a quote from `./src/main/target/common_pre.h` on extra flags:
+a quote from `./src/main/target/common_pre.h` on extra flags:
 
 ```
     CLOUD_BUILD is used to signify that the build is a user requested build and that the
@@ -56,18 +56,19 @@ just edit `.env` and restart the stack
 
 ## cleanup
 
+```
 docker compose up --remove-orphans
-
 docker builder prune
-
 docker system prune
+```
 
 ## remote access
 
 on the local machine:
 
-ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 192.168.100.175
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 192.168.100.175`
 
 ## ref
 
 - https://github.com/nvm-sh/nvm
+- https://www.betaflight.com/docs/development

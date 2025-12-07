@@ -76,6 +76,7 @@ services:
       ALL_PROXY: ${ALL_PROXY}
       BLUEJAY_TARGET: ${BLUEJAY_TARGET}
       BLUEJAY_PWM: ${BLUEJAY_PWM}
+      BLUEJAY_VERSION: ${BLUEJAY_VERSION}
     container_name: bluejay
     entrypoint: /bin/sh
     command: -c "cd /opt && chmod u+x ./bluejay.sh && ./bluejay.sh"
