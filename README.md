@@ -21,7 +21,7 @@ Ubuntu VM with docker. or baremetal windows with docker. here are the [instructi
 
 rename `sample.env` to `.env`, setup targets and versions in the variables in `.env`. use proxy, can be blank.
 
-a quote from `./src/main/target/common_pre.h` on extra flags:
+a quote from `./src/main/target/common_pre.h` on [extra flags](https://www.betaflight.com/docs/development/API/Cloud-Build-API):
 
 ```
     CLOUD_BUILD is used to signify that the build is a user requested build and that the
