@@ -9,9 +9,10 @@ if [ ! -d "/opt/ExpressLRS-Configurator" ]; then git clone https://github.com/Ex
 
 cd ExpressLRS-Configurator
 
-git pull
 
 git checkout tags/v1.7.11
+
+git pull
 
 source $NVM_DIR/nvm.sh
 nvm install $(cat .nvmrc)

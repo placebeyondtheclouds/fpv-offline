@@ -28,7 +28,7 @@ services:
   copier:
     image: alpine:latest
     entrypoint: /bin/sh
-    command: -c "cp -r /local/homepage/config/* /app/config/  && cp /local/fw.sh /betaflight/fw.sh && cp /local/bluejay.sh /bluejay/bluejay.sh"
+    command: -c " cp -r /local/homepage/config/* /app/config/  && cp /local/fw.sh /betaflight/fw.sh && cp /local/bluejay.sh /bluejay/bluejay.sh"
     container_name: copier
     restart: no
     volumes:
@@ -121,7 +121,7 @@ services:
         HTTP_PROXY: ${HTTP_PROXY}
         HTTPS_PROXY: ${HTTPS_PROXY}
         ALL_PROXY: ${ALL_PROXY}
-        NODE_VERSION: 18.16.0
+        NODE_VERSION: 16.16.0
     environment:
       HTTP_PROXY: ${HTTP_PROXY}
       HTTPS_PROXY: ${HTTPS_PROXY}

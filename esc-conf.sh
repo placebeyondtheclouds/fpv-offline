@@ -9,19 +9,15 @@ if [ ! -d "/opt/esc-configurator" ]; then git clone https://github.com/stylesuxx
 
 cd esc-configurator
 
-git pull
-
 git checkout develop
 
+git pull
+
 source $NVM_DIR/nvm.sh
-# nvm install $(cat .nvmrc)
-# nvm use $(cat .nvmrc)
 
 npm install yarn -g
 
 yarn install
 
 yarn build
-
-# yarn start --host 0.0.0.0
 

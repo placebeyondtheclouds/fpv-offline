@@ -11,11 +11,9 @@ if [ ! -d "/opt/betaflight-configurator" ]; then git clone https://github.com/be
 
 cd betaflight-configurator
 
-git pull
-
-git checkout ${BETAFLIGHT_BRANCH}
-
 git checkout tags/${BETAFLIGHT_VERSION}
+
+git pull
 
 source $NVM_DIR/nvm.sh
 nvm install $(cat .nvmrc)
