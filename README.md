@@ -36,6 +36,20 @@ a quote from `./src/main/target/common_pre.h` on [extra flags](https://www.betaf
 
 ```
 
+## disable calling home
+
+```
+sudo tee -a /etc/hosts <<-'EOF'
+127.0.0.1 img.shields.io
+127.0.0.1 build.betaflight.com
+127.0.0.1 analytics.betaflight.com
+127.0.0.1 betaflight.com
+127.0.0.1 googletagmanager.com
+EOF
+```
+
+for windows, it's in `C:\Windows\System32\drivers\etc`
+
 ## start everything
 
 ```
