@@ -2,7 +2,7 @@
 
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
 - downloads latest at the moment (v0.21.1-RC1) version of Bluejay firmware HEXes for the target and PWM set in `.env`
-- clones the repo for ESC Configurator and Betaflight Configurator, builds them at container image build stage
+- clones the repo for ESC Configurator, Betaflight Configurator and the Blackbox viewer, builds them at container image build stage
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
 
 ## video on Youtube
@@ -64,9 +64,9 @@ the firmware files are in `./fw`
 
 just edit `.env` and restart the stack
 
-## update configurator versions
+## update the configurators and the Blackbox viewer versions
 
-`docker volume list` and then `docker volume rm xxx` delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-esc`
+`docker volume list` and then `docker volume rm xxx` delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-esc bb`
 
 ## cleanup
 
