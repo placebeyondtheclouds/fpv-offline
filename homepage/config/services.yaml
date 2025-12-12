@@ -11,6 +11,10 @@
         icon: npm.png
         href: http://localhost:83
         description:
+    - Blackbox Log Viewer:
+        icon: npm.png
+        href: http://localhost:85
+        description:
     # - ELRS Configurator:
     #     icon: npm.png
     #     href: http://localhost:84

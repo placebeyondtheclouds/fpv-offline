@@ -37,7 +37,6 @@ services:
       - .:/local:ro
       - betaflight-fw_data:/betaflight:rw
       - bluejay_data:/bluejay:rw
-
   # builds fw and quits
   betaflight-fw:
     build:
@@ -113,6 +112,30 @@ services:
       - 82:8080
     command: "yarn preview --host 0.0.0.0"
 
+  bb:
+    build:
+      context: .
+      dockerfile: Dockerfile-bb
+      args:
+        COUNTRY: ${COUNTRY}
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+        BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
+        BETAFLIGHT_BRANCH: ${BETAFLIGHT_BRANCH}
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+    container_name: bb
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - bb_data:/opt:rw
+    restart: unless-stopped
+    ports:
+      - 85:4173
+    command: "yarn preview --host 0.0.0.0"
+
   configurator-esc:
     build:
       context: .
@@ -170,4 +193,6 @@ volumes:
   configurator-elrs_data:
     driver: local
   bluejay_data:
+    driver: local
+  bb_data:
     driver: local
