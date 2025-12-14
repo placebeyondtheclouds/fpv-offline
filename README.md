@@ -82,6 +82,10 @@ on the local machine:
 
 `ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 85:localhost:85 192.168.100.175`
 
+## todo
+
+- [ ] make elrs configurator work, [ref](https://hello-85764.medium.com/run-full-linux-desktop-docker-container-in-browser-using-guacamole-and-spring-boot-f89368c3156a)
+
 ## ref
 
 - https://github.com/nvm-sh/nvm

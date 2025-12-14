@@ -181,7 +181,7 @@ services:
   #     - /dev:/dev
   #     - /run/udev:/run/udev:ro
   #   restart: unless-stopped
-  #   command: "yarn start"
+  #   command: "yarn start --host 0.0.0.0"
 
 volumes:
   homepage_data:

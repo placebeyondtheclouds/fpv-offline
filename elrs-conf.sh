@@ -20,6 +20,7 @@ source $NVM_DIR/nvm.sh
 
 npm install -g npm@11.7.0
 npm install yarn -g
+npm install
 yarn install --frozen-lockfile
 chown root:root node_modules/electron/dist/chrome-sandbox
 chmod 4755 node_modules/electron/dist/chrome-sandbox
