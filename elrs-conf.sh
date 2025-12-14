@@ -15,16 +15,15 @@ git checkout tags/v1.7.11
 git pull
 
 source $NVM_DIR/nvm.sh
-nvm install $(cat .nvmrc)
-nvm use $(cat .nvmrc)
+# nvm install $(cat .nvmrc)
+# nvm use $(cat .nvmrc)
 
-
+npm install -g npm@11.7.0
 npm install yarn -g
+yarn install --frozen-lockfile
+chown root:root node_modules/electron/dist/chrome-sandbox
+chmod 4755 node_modules/electron/dist/chrome-sandbox
 
-yarn install
-
-
-yarn start --host 0.0.0.0
 
 
 
