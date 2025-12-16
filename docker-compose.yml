@@ -3,7 +3,7 @@ name: "fpv-offline"
 services:
   # menu at http://localhost:81/
   homepage:
-    image: ghcr.io/gethomepage/homepage:latest
+    image: ghcr.io/gethomepage/homepage:v1.8.0
     container_name: homepage
     environment:
       HTTP_PROXY: ${HTTP_PROXY}
