@@ -52,6 +52,18 @@ for windows, it's in `C:\Windows\System32\drivers\etc`
 
 ## start everything
 
+clone ELRS
+
+```
+git clone https://github.com/ExpressLRS/ExpressLRS-Configurator.git
+cd ExpressLRS-Configurator
+git checkout tags/v1.7.11
+cd ..
+git clone https://github.com/ExpressLRS/ExpressLRS.git
+cd ExpressLRS
+git checkout tags/3.6.2
+```
+
 ```
 docker compose up
 ```
@@ -81,6 +93,10 @@ docker system prune
 on the local machine:
 
 `ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 85:localhost:85 192.168.100.175`
+
+## todo
+
+- [ ] make elrs configurator work, [ref](https://hello-85764.medium.com/run-full-linux-desktop-docker-container-in-browser-using-guacamole-and-spring-boot-f89368c3156a)
 
 ## ref
 

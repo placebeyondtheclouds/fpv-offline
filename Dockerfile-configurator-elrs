@@ -38,6 +38,8 @@ RUN bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION"
 
 
 COPY  --chown=root:root --chmod=700  elrs-conf.sh .
+COPY  --chown=root:root --chmod=777 ExpressLRS-Configurator .
+COPY  --chown=root:root --chmod=777 ExpressLRS .
 
 RUN ./elrs-conf.sh
 

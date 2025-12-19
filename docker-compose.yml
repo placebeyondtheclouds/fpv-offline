@@ -3,7 +3,7 @@ name: "fpv-offline"
 services:
   # menu at http://localhost:81/
   homepage:
-    image: ghcr.io/gethomepage/homepage:latest
+    image: ghcr.io/gethomepage/homepage:v1.8.0
     container_name: homepage
     environment:
       HTTP_PROXY: ${HTTP_PROXY}
@@ -180,7 +180,7 @@ services:
   #     - /tmp/.X11-unix:/tmp/.X11-unix
   #     - /dev:/dev
   #     - /run/udev:/run/udev:ro
-  #   restart: unless-stopped
+  #   restart: no
   #   command: "yarn start"
 
 volumes:
