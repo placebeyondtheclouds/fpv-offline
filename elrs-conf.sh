@@ -15,10 +15,9 @@ echo $NVM_DIR
 source $NVM_DIR/nvm.sh
 # nvm install $(cat .nvmrc)
 # nvm use $(cat .nvmrc)
+# npm install
 
 npm install yarn -g
-npm install
-# npm install -g npm@11.7.0
 yarn install --frozen-lockfile
 # chown root:root node_modules/electron/dist/chrome-sandbox
 # chmod 4755 node_modules/electron/dist/chrome-sandbox

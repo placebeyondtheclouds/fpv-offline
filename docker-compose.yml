@@ -159,29 +159,29 @@ services:
       - 83:3000
     command: "yarn start --host 0.0.0.0"
 
-  # configurator-elrs:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile-configurator-elrs
-  #     args:
-  #       COUNTRY: ${COUNTRY}
-  #       HTTP_PROXY: ${HTTP_PROXY}
-  #       HTTPS_PROXY: ${HTTPS_PROXY}
-  #       ALL_PROXY: ${ALL_PROXY}
-  #       NODE_VERSION: 22.9.0
-  #   environment:
-  #     HTTP_PROXY: ${HTTP_PROXY}
-  #     HTTPS_PROXY: ${HTTPS_PROXY}
-  #     ALL_PROXY: ${ALL_PROXY}
-  #   container_name: configurator-elrs
-  #   volumes:
-  #     - /etc/localtime:/etc/localtime:ro
-  #     - configurator-elrs_data:/opt:rw
-  #     - /tmp/.X11-unix:/tmp/.X11-unix
-  #     - /dev:/dev
-  #     - /run/udev:/run/udev:ro
-  #   restart: no
-  #   command: "yarn start"
+  configurator-elrs:
+    build:
+      context: .
+      dockerfile: Dockerfile-configurator-elrs
+      args:
+        COUNTRY: ${COUNTRY}
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+        NODE_VERSION: 22.9.0
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+    container_name: configurator-elrs
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - configurator-elrs_data:/opt:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev:/dev
+      - /run/udev:/run/udev:ro
+    restart: no
+    command: "yarn start"
 
 volumes:
   homepage_data:
