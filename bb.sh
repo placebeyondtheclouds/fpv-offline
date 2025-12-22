@@ -6,12 +6,13 @@ echo $ALL_PROXY
 echo $BETAFLIGHT_BRANCH
 echo $BETAFLIGHT_VERSION
 echo $NVM_DIR
+echo $BB_VER
 
 if [ ! -d "/opt/blackbox-log-viewer" ]; then git clone https://github.com/betaflight/blackbox-log-viewer.git; fi
 
 cd blackbox-log-viewer
 
-git checkout master
+git checkout tags/$BB_VER
 
 git pull
 
