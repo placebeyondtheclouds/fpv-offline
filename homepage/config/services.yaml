@@ -5,27 +5,23 @@
 - Configurators:
     - Betaflight Configurator:
         icon: npm.png
-        href: http://localhost:82
+        href: http://{{HOMEPAGE_VAR_HOST_IP}}:82
         description: "version: {{HOMEPAGE_VAR_BETAFLIGHT_VERSION}}"
     - ESC Configurator:
         icon: npm.png
-        href: http://localhost:83
+        href: http://{{HOMEPAGE_VAR_HOST_IP}}:83
         description:
     - Blackbox Log Viewer:
         icon: npm.png
-        href: http://localhost:85
+        href: http://{{HOMEPAGE_VAR_HOST_IP}}:85
         description:
     # - ELRS Configurator:
     #     icon: npm.png
-    #     href: http://localhost:84
+    #     href: http://{{HOMEPAGE_VAR_HOST_IP}}:84
     #     description:
 
 - Files:
-    - betaflight firmware:
-        icon: file.png
-        href: none
-        description: "betaflight  {{HOMEPAGE_VAR_BETAFLIGHT_VERSION}}, target {{HOMEPAGE_VAR_BETAFLIGHT_FW_TARGET}}"
-    - bluejay firmware:
-        icon: file.png
-        href: none
-        description: "target {{HOMEPAGE_VAR_BLUEJAY_TARGET}}, PWM {{HOMEPAGE_VAR_BLUEJAY_PWM}} kHz"
+    - download the files:
+        icon: nginx.png
+        href: http://{{HOMEPAGE_VAR_HOST_IP}}:86
+        description: "current betaflight {{HOMEPAGE_VAR_BETAFLIGHT_VERSION}}, target {{HOMEPAGE_VAR_BETAFLIGHT_FW_TARGET}}. current Bluejay {{HOMEPAGE_VAR_BLUEJAY_VERSION}}, target {{HOMEPAGE_VAR_BLUEJAY_TARGET}}, PWM {{HOMEPAGE_VAR_BLUEJAY_PWM}} kHz. "

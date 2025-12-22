@@ -4,12 +4,13 @@ echo $HTTP_PROXY
 echo $HTTPS_PROXY
 echo $ALL_PROXY
 echo $NVM_DIR
+echo $ESC_CONF_VER
 
 if [ ! -d "/opt/esc-configurator" ]; then git clone https://github.com/stylesuxx/esc-configurator.git; fi
 
 cd esc-configurator
 
-git checkout develop
+git checkout tags/$ESC_CONF_VER
 
 git pull
 
