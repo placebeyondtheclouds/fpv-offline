@@ -4,6 +4,7 @@
 - downloads latest at the moment (v0.21.1-RC1) version of Bluejay firmware HEXes for the target and PWM set in `.env`
 - clones the repo for ESC Configurator, Betaflight Configurator and the Blackbox viewer, builds them at container image build stage
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
+  <br><img src="./image.png" alt="screenshot" width="50%">
 
 ## video on Youtube
 
