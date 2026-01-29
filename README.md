@@ -2,7 +2,7 @@
 
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
 - downloads Bluejay firmware HEXes for the target and PWM set in `.env`
-- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator and the Blackbox viewer, builds them at container image build stage. Everything is downloaded and baked (except the Bluejay hexes) into the images so the consequent startups are fast.
+- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator and the Blackbox viewer, builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
   <br><img src="./image.png" alt="screenshot" width="50%">
 
@@ -73,15 +73,15 @@ just edit `.env` and restart the stack
 
 ```
 docker compose up --remove-orphans
-docker builder prune
-docker system prune
+docker builder prune --force
+docker system prune --force
 ```
 
 ## remote access
 
 on the local machine:
 
-`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 192.168.100.175`
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
 
 ## todo
 
