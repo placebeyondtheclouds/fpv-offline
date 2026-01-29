@@ -163,6 +163,29 @@ services:
       - 83:3000
     command: "yarn start --host 0.0.0.0"
 
+  elrs-webflasher:
+    build:
+      context: .
+      dockerfile: Dockerfile-elrs-webflasher
+      args:
+        COUNTRY: ${COUNTRY}
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+        NODE_VERSION: 25.3.0
+        ELRS_FLASHER_VER: ${ELRS_FLASHER_VER}
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+    container_name: elrs-webflasher
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    ports:
+      - 84:5173
+    command: "npm run dev -- --host"
+
   nginx:
     build:
       context: .

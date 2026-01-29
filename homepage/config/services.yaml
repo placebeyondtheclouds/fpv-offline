@@ -15,10 +15,10 @@
         icon: npm.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:85
         description:
-    # - ELRS Configurator:
-    #     icon: npm.png
-    #     href: http://{{HOMEPAGE_VAR_HOST_IP}}:84
-    #     description:
+    - ELRS Web Flasher:
+        icon: npm.png
+        href: http://{{HOMEPAGE_VAR_HOST_IP}}:84
+        description:
 
 - Files:
     - download the files:
