@@ -1,8 +1,8 @@
 ## what the stack does
 
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
-- downloads latest at the moment (v0.21.1-RC1) version of Bluejay firmware HEXes for the target and PWM set in `.env`
-- clones the repo for ESC Configurator, Betaflight Configurator and the Blackbox viewer, builds them at container image build stage
+- downloads Bluejay firmware HEXes for the target and PWM set in `.env`
+- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator and the Blackbox viewer, builds them at container image build stage. Everything is downloaded and baked (except the Bluejay hexes) into the images so the consequent startups are fast.
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
   <br><img src="./image.png" alt="screenshot" width="50%">
 
@@ -57,9 +57,9 @@ for windows, it's in `C:\Windows\System32\drivers\etc`
 docker compose up
 ```
 
-navigate to **http://localhost:81**
+navigate to **http://localhost:81** in Chrome browser
 
-the firmware files are in `./fw`
+the firmware files are in `./fw` and are served as an open directory (**be aware**) at http://localhost:86
 
 ## update Betaflight or Bluejay firmware targets and options
 
@@ -81,11 +81,11 @@ docker system prune
 
 on the local machine:
 
-`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 85:localhost:85 192.168.100.175`
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 192.168.100.175`
 
 ## todo
 
-- [ ] make elrs configurator work, [ref](https://hello-85764.medium.com/run-full-linux-desktop-docker-container-in-browser-using-guacamole-and-spring-boot-f89368c3156a)
+- [x] make elrs configurator work
 
 ## ref
 
