@@ -81,7 +81,7 @@ docker system prune --force
 
 on the local machine:
 
-`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
 
 ## todo
 

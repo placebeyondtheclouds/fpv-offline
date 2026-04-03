@@ -28,7 +28,7 @@ services:
 
   # updates scripts on containers volumes for Betaflight firmware, Bluejay firmware and the Homepage
   copier:
-    image: alpine:latest
+    image: alpine:3.23.3
     entrypoint: /bin/sh
     command: -c " cp -r /local/homepage/config/* /app/config/  && cp /local/fw.sh /betaflight/fw.sh && cp /local/bluejay.sh /bluejay/bluejay.sh"
     container_name: copier
