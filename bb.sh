@@ -3,7 +3,6 @@
 echo $HTTP_PROXY
 echo $HTTPS_PROXY
 echo $ALL_PROXY
-echo $BETAFLIGHT_BRANCH
 echo $BETAFLIGHT_VERSION
 echo $NVM_DIR
 echo $BB_VER

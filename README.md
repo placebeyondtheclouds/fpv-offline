@@ -77,7 +77,7 @@ just edit `.env` and restart the stack
 
 ## update the configurators and the Blackbox viewer versions
 
-`docker volume list` and then `docker volume rm xxx` delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-esc bb`
+`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-esc bb`
 
 ## cleanup
 
