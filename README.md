@@ -20,6 +20,16 @@ Ubuntu VM with docker. or baremetal windows with docker. here are the [instructi
 
 ## setup envs
 
+check for new versions at:
+
+```
+https://github.com/betaflight/betaflight
+https://github.com/betaflight/blackbox-log-viewer
+https://github.com/betaflight/betaflight-configurator
+https://github.com/bird-sanctuary/bluejay
+https://github.com/stylesuxx/esc-configurator
+```
+
 rename `sample.env` to `.env`, setup targets and versions in the variables in `.env`. use proxy, can be blank.
 
 a quote from `./src/main/target/common_pre.h` on [extra flags](https://www.betaflight.com/docs/development/API/Cloud-Build-API):
@@ -53,7 +63,7 @@ for windows, it's in `C:\Windows\System32\drivers\etc`
 
 ## start everything
 
-```
+```shell
 docker compose up
 ```
 
