@@ -6,6 +6,8 @@ if [ ! -d "/opt/betaflight" ]; then git clone https://github.com/betaflight/beta
 
 cd betaflight
 
+git checkout $BETAFLIGHT_BRANCH
+
 git checkout tags/$BETAFLIGHT_VERSION
 
 git pull
@@ -24,7 +26,6 @@ echo
 echo $HTTP_PROXY
 echo $HTTPS_PROXY
 echo $ALL_PROXY
-echo $BETAFLIGHT_BRANCH
 echo $BETAFLIGHT_VERSION
 echo $BETAFLIGHT_FW_TARGET
 echo $BETAFLIGHT_FW_EXTRA_FLAGS

@@ -5,7 +5,6 @@ ARG COUNTRY
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 ARG ALL_PROXY
-ARG BETAFLIGHT_CONF_VERSION
 
 
 
@@ -33,9 +32,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | b
 # set env
 ENV NVM_DIR=/root/.nvm
 
-COPY  --chown=root:root --chmod=700  bf-conf.sh .
+COPY  --chown=root:root --chmod=700  bf-conf-master.sh .
 
-RUN ./bf-conf.sh
+RUN ./bf-conf-master.sh
 
 WORKDIR /opt/betaflight-configurator
 

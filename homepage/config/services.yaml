@@ -6,7 +6,11 @@
     - Betaflight Configurator:
         icon: npm.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:82
-        description: "version: {{HOMEPAGE_VAR_BETAFLIGHT_VERSION}}"
+        description: "tag: {{HOMEPAGE_VAR_BETAFLIGHT_CONF_VERSION}}"
+    - Betaflight Configurator Master:
+        icon: npm.png
+        href: http://{{HOMEPAGE_VAR_HOST_IP}}:88
+        description: "branch: master"
     - ESC Configurator:
         icon: npm.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:83

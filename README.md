@@ -71,13 +71,18 @@ navigate to **http://localhost:81** in Chrome browser
 
 the firmware files are in `./fw` and are served as an open directory (**be aware**) at http://localhost:86
 
+Betaflight Configurator is available in two builds:
+
+- tagged version from `.env`: http://localhost:82
+- `master` branch build: http://localhost:87
+
 ## update Betaflight or Bluejay firmware targets and options
 
 just edit `.env` and restart the stack
 
 ## update the configurators and the Blackbox viewer versions
 
-`docker volume list` and then `docker volume rm xxx` delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-esc bb`
+`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-betaflight-master configurator-esc bb`
 
 ## cleanup
 
@@ -91,7 +96,7 @@ docker system prune --force
 
 on the local machine:
 
-`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 87:localhost:87 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
 
 ## todo
 

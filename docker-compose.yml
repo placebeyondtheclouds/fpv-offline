@@ -11,6 +11,7 @@ services:
       ALL_PROXY: ${ALL_PROXY}
       HOMEPAGE_ALLOWED_HOSTS: localhost:81
       HOMEPAGE_VAR_BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
+      HOMEPAGE_VAR_BETAFLIGHT_CONF_VERSION: ${BETAFLIGHT_CONF_VERSION}
       HOMEPAGE_VAR_BETAFLIGHT_FW_TARGET: ${BETAFLIGHT_FW_TARGET}
       HOMEPAGE_VAR_BLUEJAY_TARGET: ${BLUEJAY_TARGET}
       HOMEPAGE_VAR_BLUEJAY_PWM: ${BLUEJAY_PWM}
@@ -50,8 +51,8 @@ services:
       HTTP_PROXY: ${HTTP_PROXY}
       HTTPS_PROXY: ${HTTPS_PROXY}
       ALL_PROXY: ${ALL_PROXY}
-      BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
       BETAFLIGHT_BRANCH: ${BETAFLIGHT_BRANCH}
+      BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
       BETAFLIGHT_FW_TARGET: ${BETAFLIGHT_FW_TARGET}
       BETAFLIGHT_FW_EXTRA_FLAGS: ${BETAFLIGHT_FW_EXTRA_FLAGS}
       ARM_SDK_DIR: "/usr/"
@@ -99,8 +100,7 @@ services:
         HTTP_PROXY: ${HTTP_PROXY}
         HTTPS_PROXY: ${HTTPS_PROXY}
         ALL_PROXY: ${ALL_PROXY}
-        BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
-        BETAFLIGHT_BRANCH: ${BETAFLIGHT_BRANCH}
+        BETAFLIGHT_CONF_VERSION: ${BETAFLIGHT_CONF_VERSION}
     environment:
       HTTP_PROXY: ${HTTP_PROXY}
       HTTPS_PROXY: ${HTTPS_PROXY}
@@ -114,6 +114,28 @@ services:
       - 82:8080
     command: "yarn preview --host 0.0.0.0"
 
+  configurator-betaflight-master:
+    build:
+      context: .
+      dockerfile: Dockerfile-configurator-bf-master
+      args:
+        COUNTRY: ${COUNTRY}
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+    container_name: configurator-betaflight-master
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - configurator-betaflight-master_data:/opt:rw
+    restart: unless-stopped
+    ports:
+      - 88:8080
+    command: "yarn preview --host 0.0.0.0"
+
   bb:
     build:
       context: .
@@ -124,7 +146,6 @@ services:
         HTTPS_PROXY: ${HTTPS_PROXY}
         ALL_PROXY: ${ALL_PROXY}
         BETAFLIGHT_VERSION: ${BETAFLIGHT_VERSION}
-        BETAFLIGHT_BRANCH: ${BETAFLIGHT_BRANCH}
         BB_VER: ${BB_VER}
     environment:
       HTTP_PROXY: ${HTTP_PROXY}
@@ -204,6 +225,8 @@ volumes:
   betaflight-fw_data:
     driver: local
   configurator-betaflight_data:
+    driver: local
+  configurator-betaflight-master_data:
     driver: local
   configurator-esc_data:
     driver: local
