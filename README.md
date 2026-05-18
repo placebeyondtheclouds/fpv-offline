@@ -2,7 +2,7 @@
 
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
 - downloads Bluejay firmware HEXes for the target and PWM set in `.env`
-- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator and the Blackbox viewer, builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
+- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator, the Blackbox viewer and AM32 Configurator, builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
   <br><img src="./image.png" alt="screenshot" width="50%">
 
@@ -28,6 +28,7 @@ https://github.com/betaflight/blackbox-log-viewer
 https://github.com/betaflight/betaflight-configurator
 https://github.com/bird-sanctuary/bluejay
 https://github.com/stylesuxx/esc-configurator
+https://github.com/am32-firmware/am32-configurator
 ```
 
 rename `sample.env` to `.env`, setup targets and versions in the variables in `.env`. use proxy, can be blank.
@@ -74,7 +75,9 @@ the firmware files are in `./fw` and are served as an open directory (**be aware
 Betaflight Configurator is available in two builds:
 
 - tagged version from `.env`: http://localhost:82
-- `master` branch build: http://localhost:87
+- `master` branch build: http://localhost:88
+
+AM32 Configurator `master` branch build is available at http://localhost:89
 
 ## update Betaflight or Bluejay firmware targets and options
 
@@ -82,7 +85,7 @@ just edit `.env` and restart the stack. set BETAFLIGHT_BRANCH to `master` (and i
 
 ## update the configurators and the Blackbox viewer versions
 
-`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-betaflight-master configurator-esc bb`
+`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-betaflight-master configurator-am32-master configurator-esc bb`
 
 ## cleanup
 
@@ -96,7 +99,7 @@ docker system prune --force
 
 on the local machine:
 
-`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 88:localhost:88 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 88:localhost:88 -L 89:localhost:89 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
 
 ## todo
 

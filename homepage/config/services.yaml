@@ -11,6 +11,10 @@
         icon: npm.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:88
         description: "branch: master"
+    - AM32 Configurator Master:
+        icon: npm.png
+        href: http://{{HOMEPAGE_VAR_HOST_IP}}:89
+        description: "branch: master"
     - ESC Configurator:
         icon: npm.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:83
