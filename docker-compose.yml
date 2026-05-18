@@ -136,6 +136,34 @@ services:
       - 88:8080
     command: "yarn preview --host 0.0.0.0"
 
+  configurator-am32-master:
+    build:
+      context: .
+      dockerfile: Dockerfile-configurator-am32-master
+      args:
+        COUNTRY: ${COUNTRY}
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+        NODE_VERSION: 24
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+      DATABASE_URL: mysql://am32:am32@127.0.0.1:3306/am32
+      HOST: 0.0.0.0
+      PORT: 3000
+      NITRO_HOST: 0.0.0.0
+      NITRO_PORT: 3000
+    container_name: configurator-am32-master
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - configurator-am32-master_data:/opt:rw
+    restart: unless-stopped
+    ports:
+      - 89:3000
+    command: "node .output/server/index.mjs"
+
   bb:
     build:
       context: .
@@ -227,6 +255,8 @@ volumes:
   configurator-betaflight_data:
     driver: local
   configurator-betaflight-master_data:
+    driver: local
+  configurator-am32-master_data:
     driver: local
   configurator-esc_data:
     driver: local
