@@ -21,7 +21,7 @@ deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe m
 
 RUN apt -y update
 RUN apt -y full-upgrade
-RUN apt -y install git curl python3 python-is-python3 npm
+RUN apt -y install git curl build-essential python3 python-is-python3 python3-setuptools npm
 
 RUN mkdir -p /opt
 WORKDIR /opt
@@ -33,7 +33,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | b
 # set env
 ENV NVM_DIR=/root/.nvm
 
-COPY  --chown=root:root --chmod=700  bf-conf.sh .
+COPY  --chown=root:root --chmod=700  build-common.sh bf-conf.sh .
 
 RUN ./bf-conf.sh
 

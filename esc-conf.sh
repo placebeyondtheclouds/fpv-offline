@@ -1,24 +1,26 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-echo $HTTP_PROXY
-echo $HTTPS_PROXY
-echo $ALL_PROXY
-echo $NVM_DIR
-echo $ESC_CONF_VER
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=build-common.sh
+source "$SCRIPT_DIR/build-common.sh"
 
-if [ ! -d "/opt/esc-configurator" ]; then git clone https://github.com/stylesuxx/esc-configurator.git; fi
+: "${ESC_CONF_VER:?ESC_CONF_VER is required}"
 
-cd esc-configurator
+print_proxy_env
+printf 'NVM_DIR=%s\n' "$NVM_DIR"
+printf 'ESC_CONF_VER=%s\n' "$ESC_CONF_VER"
 
-git checkout tags/$ESC_CONF_VER
+repo_dir="/opt/esc-configurator"
 
-git pull
+clone_or_fetch "https://github.com/stylesuxx/esc-configurator.git" "$repo_dir"
+checkout_tag "$repo_dir" "$ESC_CONF_VER"
 
-source $NVM_DIR/nvm.sh
+load_nvm
 
 npm install yarn -g
 
+cd "$repo_dir"
 yarn install
 
 yarn build
-

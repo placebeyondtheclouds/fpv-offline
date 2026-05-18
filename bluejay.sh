@@ -1,12 +1,19 @@
 #!/bin/sh
+set -eu
 
-echo $BLUEJAY_VERSION
-echo $BLUEJAY_TARGET
-echo $BLUEJAY_PWM
+: "${BLUEJAY_VERSION:?BLUEJAY_VERSION is required}"
+: "${BLUEJAY_TARGET:?BLUEJAY_TARGET is required}"
+: "${BLUEJAY_PWM:?BLUEJAY_PWM is required}"
 
-URL="https://github.com/bird-sanctuary/bluejay/releases/download/${BLUEJAY_VERSION}/$(echo "$BLUEJAY_TARGET" | tr '-' '_')_${BLUEJAY_PWM}_${BLUEJAY_VERSION}.hex"
+printf 'BLUEJAY_VERSION=%s\n' "$BLUEJAY_VERSION"
+printf 'BLUEJAY_TARGET=%s\n' "$BLUEJAY_TARGET"
+printf 'BLUEJAY_PWM=%s\n' "$BLUEJAY_PWM"
 
-echo $URL
-curl -L -O "$URL"
+target_name="$(printf '%s' "$BLUEJAY_TARGET" | tr '-' '_')"
+file_name="${target_name}_${BLUEJAY_PWM}_${BLUEJAY_VERSION}.hex"
+url="https://github.com/bird-sanctuary/bluejay/releases/download/${BLUEJAY_VERSION}/${file_name}"
 
-cp -r *.hex /fw
+printf 'URL=%s\n' "$url"
+curl -fL --output "$file_name" "$url"
+
+cp "$file_name" /fw/

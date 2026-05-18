@@ -1,25 +1,27 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-echo $HTTP_PROXY
-echo $HTTPS_PROXY
-echo $ALL_PROXY
-echo $BETAFLIGHT_CONF_VERSION
-echo $NVM_DIR
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=build-common.sh
+source "$SCRIPT_DIR/build-common.sh"
 
-if [ ! -d "/opt/betaflight-configurator" ]; then git clone https://github.com/betaflight/betaflight-configurator.git; fi
+: "${BETAFLIGHT_CONF_VERSION:?BETAFLIGHT_CONF_VERSION is required}"
 
-cd betaflight-configurator
+print_proxy_env
+printf 'BETAFLIGHT_CONF_VERSION=%s\n' "$BETAFLIGHT_CONF_VERSION"
+printf 'NVM_DIR=%s\n' "$NVM_DIR"
 
-git checkout tags/${BETAFLIGHT_CONF_VERSION}
+repo_dir="/opt/betaflight-configurator"
 
-git pull
+clone_or_fetch "https://github.com/betaflight/betaflight-configurator.git" "$repo_dir"
+checkout_tag "$repo_dir" "$BETAFLIGHT_CONF_VERSION"
 
-source $NVM_DIR/nvm.sh
-nvm install $(cat .nvmrc)
-nvm use $(cat .nvmrc)
+load_nvm
+use_node_from_nvmrc "$repo_dir"
 
 npm install yarn -g
 
+cd "$repo_dir"
 yarn install
 
 yarn build
