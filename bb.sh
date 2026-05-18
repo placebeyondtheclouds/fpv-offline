@@ -1,26 +1,28 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-echo $HTTP_PROXY
-echo $HTTPS_PROXY
-echo $ALL_PROXY
-echo $BETAFLIGHT_VERSION
-echo $NVM_DIR
-echo $BB_VER
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=build-common.sh
+source "$SCRIPT_DIR/build-common.sh"
 
-if [ ! -d "/opt/blackbox-log-viewer" ]; then git clone https://github.com/betaflight/blackbox-log-viewer.git; fi
+: "${BB_VER:?BB_VER is required}"
 
-cd blackbox-log-viewer
+print_proxy_env
+printf 'BETAFLIGHT_VERSION=%s\n' "${BETAFLIGHT_VERSION:-}"
+printf 'NVM_DIR=%s\n' "$NVM_DIR"
+printf 'BB_VER=%s\n' "$BB_VER"
 
-git checkout tags/$BB_VER
+repo_dir="/opt/blackbox-log-viewer"
 
-git pull
+clone_or_fetch "https://github.com/betaflight/blackbox-log-viewer.git" "$repo_dir"
+checkout_tag "$repo_dir" "$BB_VER"
 
-source $NVM_DIR/nvm.sh
-nvm install $(cat .nvmrc)
-nvm use $(cat .nvmrc)
+load_nvm
+use_node_from_nvmrc "$repo_dir"
 
 npm install yarn -g
 
+cd "$repo_dir"
 yarn install
 
 yarn build

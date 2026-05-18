@@ -6,7 +6,7 @@ ARG HTTP_PROXY
 ARG HTTPS_PROXY
 ARG ALL_PROXY
 ARG NODE_VERSION
-ARG ESC_CONF_VER
+ARG ELRS_FLASHER_VER
 
 
 
@@ -22,7 +22,7 @@ deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe m
 
 RUN apt -y update
 RUN apt -y full-upgrade
-RUN apt -y install git curl python3 python-is-python3 npm unzip jq
+RUN apt -y install git curl build-essential python3 python-is-python3 python3-setuptools npm unzip jq
 
 RUN mkdir -p /opt
 WORKDIR /opt
@@ -37,7 +37,7 @@ ENV NVM_DIR=/root/.nvm
 # install node
 RUN bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION"
 
-COPY  --chown=root:root --chmod=700  elrs.sh .
+COPY  --chown=root:root --chmod=700  build-common.sh elrs.sh .
 
 RUN ./elrs.sh
 
@@ -45,5 +45,3 @@ WORKDIR /opt/web-flasher
 
 # set ENTRYPOINT for reloading nvm-environment
 ENTRYPOINT ["bash", "-c", "source $NVM_DIR/nvm.sh && exec \"$@\"", "--"]
-
-

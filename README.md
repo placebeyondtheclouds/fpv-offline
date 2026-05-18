@@ -78,7 +78,7 @@ Betaflight Configurator is available in two builds:
 
 ## update Betaflight or Bluejay firmware targets and options
 
-just edit `.env` and restart the stack
+just edit `.env` and restart the stack. set BETAFLIGHT_BRANCH to `master` (and ignore the version) to build the latest version of the firmware
 
 ## update the configurators and the Blackbox viewer versions
 
@@ -96,7 +96,7 @@ docker system prune --force
 
 on the local machine:
 
-`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 87:localhost:87 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 88:localhost:88 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
 
 ## todo
 
