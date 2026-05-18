@@ -205,7 +205,7 @@ services:
     restart: unless-stopped
     ports:
       - 84:5173
-    command: "npm run dev -- --host"
+    command: "npm run dev -- --host 0.0.0.0"
 
   nginx:
     build:
