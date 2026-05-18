@@ -204,7 +204,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     ports:
-      - 84:5173
+      - 84:8080
     command: "npm run dev -- --host 0.0.0.0"
 
   nginx:
