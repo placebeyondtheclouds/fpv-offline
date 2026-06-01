@@ -1,24 +1,22 @@
 ## what the stack does
 
+Creates an offline environment with apps needed for setting up an FPV quad.
+
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
 - downloads Bluejay firmware HEXes for the target and PWM set in `.env`
 - clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator, the Blackbox viewer and AM32 Configurator, builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
   <br><img src="./image.png" alt="screenshot" width="50%">
 
-## video on Youtube
+## video on Youtube about the motivation behind this repo
 
 [![Flashing Betaflight offline](https://img.youtube.com/vi/1Zfap0P8PoI/0.jpg)](https://www.youtube.com/watch?v=1Zfap0P8PoI "Flashing Betaflight offline")
 
-## the host
+## the host requirements to run this stack
 
 Ubuntu VM with docker. or baremetal windows with docker. here are the [instructions how to install docker on debian](https://github.com/placebeyondtheclouds/gpu-home-server?tab=readme-ov-file#continue-setting-up-the-debian-lxc-with-gpu-enabled-docker). for ubuntu just replace `debian` with `ubuntu` in one command
 
-## do it once
-
-`git clone https://github.com/placebeyondtheclouds/fpv-offline.git && cd fpv-offline && chmod 777 fw`
-
-## setup envs
+## env vars setup
 
 check for new versions at:
 
@@ -48,7 +46,11 @@ a quote from `./src/main/target/common_pre.h` on [extra flags](https://www.betaf
 
 ```
 
-## disable calling home
+## first run (do it once)
+
+`git clone https://github.com/placebeyondtheclouds/fpv-offline.git && cd fpv-offline && chmod 777 fw`
+
+## (optional) disable calling home
 
 ```
 sudo tee -a /etc/hosts <<-'EOF'
@@ -85,11 +87,11 @@ just edit `.env` and restart the stack. set BETAFLIGHT_BRANCH to `master` (and i
 
 ## update the configurators and the Blackbox viewer versions
 
-`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-betaflight-master configurator-am32-master configurator-esc bb`
+`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate`
 
 ## cleanup
 
-```
+```shell
 docker compose up --remove-orphans
 docker builder prune --force
 docker system prune --force
@@ -97,7 +99,7 @@ docker system prune --force
 
 ## remote access
 
-on the local machine:
+to access the services from another machine use ssh port forwarding:
 
 `ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 88:localhost:88 -L 89:localhost:89 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
 
