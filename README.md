@@ -85,7 +85,7 @@ just edit `.env` and restart the stack. set BETAFLIGHT_BRANCH to `master` (and i
 
 ## update the configurators and the Blackbox viewer versions
 
-`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate configurator-betaflight configurator-betaflight-master configurator-am32-master configurator-esc bb`
+`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate`
 
 ## cleanup
 
