@@ -21,7 +21,6 @@ deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe m
 
 
 RUN apt -y update
-RUN apt -y full-upgrade
 RUN apt -y install git curl build-essential python3 python-is-python3 python3-setuptools npm unzip jq
 
 RUN mkdir -p /opt
