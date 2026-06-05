@@ -14,7 +14,6 @@ deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe m
 
 
 RUN apt -y update
-RUN apt -y full-upgrade
 RUN apt -y install build-essential git curl clang-18 python3 python-is-python3
 
 RUN mkdir -p /opt /fw
