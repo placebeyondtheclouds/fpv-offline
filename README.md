@@ -4,7 +4,7 @@ Creates an offline environment with apps needed for setting up an FPV quad.
 
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
 - downloads Bluejay firmware HEXes for the target and PWM set in `.env`
-- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator, the Blackbox viewer and AM32 Configurator, builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
+- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator, the Blackbox viewer, AM32 Configurator and Bucksaw, builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
   <br><img src="./image.png" alt="screenshot" width="50%">
 
@@ -27,6 +27,7 @@ https://github.com/betaflight/betaflight-configurator
 https://github.com/bird-sanctuary/bluejay
 https://github.com/stylesuxx/esc-configurator
 https://github.com/am32-firmware/am32-configurator
+https://github.com/KoffeinFlummi/bucksaw
 ```
 
 rename `sample.env` to `.env`, setup targets and versions in the variables in `.env`. use proxy, can be blank.
@@ -81,13 +82,15 @@ Betaflight Configurator is available in two builds:
 
 AM32 Configurator `master` branch build is available at http://localhost:89
 
+Bucksaw is available at http://localhost:90
+
 ## update Betaflight or Bluejay firmware targets and options
 
 just edit `.env` and restart the stack. set BETAFLIGHT_BRANCH to `master` (and ignore the version) to build the latest version of the firmware
 
 ## update the configurators and the Blackbox viewer versions
 
-`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate`
+`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate --no-cache`, or `docker compose build --no-cache bucksaw` etc
 
 ## cleanup
 
@@ -101,7 +104,7 @@ docker system prune --force
 
 to access the services from another machine use ssh port forwarding:
 
-`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 88:localhost:88 -L 89:localhost:89 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 90:localhost:90 -L 88:localhost:88 -L 89:localhost:89 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
 
 ## todo
 

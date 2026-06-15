@@ -1,0 +1,61 @@
+diff -ruN blackbox-log-0.4.2.orig/src/headers.rs blackbox-log-0.4.2.new/src/headers.rs
+--- blackbox-log-0.4.2.orig/src/headers.rs	2006-07-24 01:21:28.000000000 +0000
++++ blackbox-log-0.4.2.new/src/headers.rs	2026-06-15 08:07:29.477791683 +0000
+@@ -359,7 +359,7 @@
+         let (fw, is_supported) = match kind.as_deref() {
+             Some("betaflight") => (
+                 Firmware::Betaflight(version),
+-                crate::BETAFLIGHT_SUPPORT.contains(&version),
++                crate::betaflight_supported(&version),
+             ),
+             Some("inav") => (
+                 Firmware::Inav(version),
+@@ -395,13 +395,13 @@
+ 
+ #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+ pub struct FirmwareVersion {
+-    pub major: u8,
+-    pub minor: u8,
+-    pub patch: u8,
++    pub major: u16,
++    pub minor: u16,
++    pub patch: u16,
+ }
+ 
+ impl FirmwareVersion {
+-    pub const fn new(major: u8, minor: u8, patch: u8) -> Self {
++    pub const fn new(major: u16, minor: u16, patch: u16) -> Self {
+         Self {
+             major,
+             minor,
+@@ -486,6 +486,12 @@
+             Firmware::Betaflight(FirmwareVersion {
+                 major: 4, minor: 5, ..
+             }) => Self::Betaflight4_5,
++            // Betaflight switched to calendar-style release numbers in this stack.
++            // Treat 2025.x and 2026.x logs as the latest known Betaflight blackbox layout
++            // until blackbox-log gains native support for the new release line.
++            Firmware::Betaflight(FirmwareVersion { major: 2025 | 2026, .. }) => {
++                Self::Betaflight4_5
++            }
+             Firmware::Inav(FirmwareVersion { major: 5, .. }) => Self::Inav5,
+             Firmware::Inav(FirmwareVersion { major: 6, .. }) => Self::Inav6,
+             Firmware::Inav(FirmwareVersion { major: 7, .. }) => Self::Inav7,
+diff -ruN blackbox-log-0.4.2.orig/src/lib.rs blackbox-log-0.4.2.new/src/lib.rs
+--- blackbox-log-0.4.2.orig/src/lib.rs	2006-07-24 01:21:28.000000000 +0000
++++ blackbox-log-0.4.2.new/src/lib.rs	2026-06-15 08:07:29.481444685 +0000
+@@ -117,7 +117,13 @@
+ /// The first line of any blackbox log.
+ const MARKER: &[u8] = b"H Product:Blackbox flight data recorder by Nicholas Sherlock\n";
+ 
+-const BETAFLIGHT_SUPPORT: Range<FirmwareVersion> =
++const BETAFLIGHT_LEGACY_SUPPORT: Range<FirmwareVersion> =
+     FirmwareVersion::new(4, 2, 0)..FirmwareVersion::new(4, 6, 0);
++const BETAFLIGHT_CALENDAR_SUPPORT: Range<FirmwareVersion> =
++    FirmwareVersion::new(2025, 0, 0)..FirmwareVersion::new(2027, 0, 0);
+ const INAV_SUPPORT: Range<FirmwareVersion> =
+     FirmwareVersion::new(5, 0, 0)..FirmwareVersion::new(8, 0, 0);
++
++pub(crate) fn betaflight_supported(version: &FirmwareVersion) -> bool {
++    BETAFLIGHT_LEGACY_SUPPORT.contains(version) || BETAFLIGHT_CALENDAR_SUPPORT.contains(version)
++}

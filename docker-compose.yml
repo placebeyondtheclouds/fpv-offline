@@ -235,6 +235,27 @@ services:
       - 84:8080
     command: "npm run dev -- --host 0.0.0.0"
 
+  bucksaw:
+    build:
+      context: .
+      dockerfile: Dockerfile-bucksaw
+      args:
+        COUNTRY: ${COUNTRY}
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+        BUCKSAW_REF: ${BUCKSAW_REF}
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
+    container_name: bucksaw
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    ports:
+      - 90:80
+
   nginx:
     build:
       context: .
