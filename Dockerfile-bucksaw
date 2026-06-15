@@ -1,0 +1,54 @@
+FROM ubuntu:24.04 AS builder
+
+
+ARG COUNTRY
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG ALL_PROXY
+ARG BUCKSAW_REF
+
+
+
+RUN apt -o Acquire::Retries=5 update && apt -o Acquire::Retries=5 install -y --no-install-recommends ca-certificates
+
+#China only
+RUN if [ "$COUNTRY" = "CHINA" ] ; then echo>/etc/apt/sources.list; echo>/etc/apt/sources.list.d/ubuntu.sources; printf "deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble main restricted universe multiverse\n\
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-updates main restricted universe multiverse\n\
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-backports main restricted universe multiverse\n\
+deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse\n" >/etc/apt/sources.list ;fi
+
+
+
+RUN apt -o Acquire::Retries=5 -y update
+RUN apt -o Acquire::Retries=5 -y install --no-install-recommends git curl build-essential pkg-config libssl-dev
+
+RUN mkdir -p /opt
+WORKDIR /opt
+
+ENV CARGO_HOME=/root/.cargo
+ENV RUSTUP_HOME=/root/.rustup
+ENV PATH=/root/.cargo/bin:$PATH
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+RUN rustup target add wasm32-unknown-unknown
+RUN cargo install trunk --locked
+
+COPY  --chown=root:root --chmod=700  build-common.sh bucksaw.sh .
+
+RUN ./bucksaw.sh
+
+
+FROM nginx:1.30.2-alpine3.23
+
+# Copy config nginx
+COPY ./nginx-bucksaw.conf /etc/nginx/conf.d/default.conf
+
+WORKDIR /usr/share/nginx/html
+
+# Remove default nginx static assets
+RUN rm -rf ./*
+
+COPY --from=builder /opt/bucksaw/dist/ .
+
+# Containers run nginx with global directives and daemon off
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
