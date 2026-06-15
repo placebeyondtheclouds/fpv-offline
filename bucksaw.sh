@@ -40,17 +40,8 @@ blackbox-log = { path = "../blackbox-log-0.4.2-patched" }
 EOF
 fi
 
-disable_service_worker() {
-  rm -f dist/sw.js
-
-  if [ -f dist/index.html ]; then
-    sed -i "s|navigator.serviceWorker.register('sw.js');|navigator.serviceWorker.getRegistrations().then((registrations) => registrations.forEach((registration) => registration.unregister()));|" dist/index.html
-  fi
-}
-
 for attempt in 1 2 3; do
   if trunk build --release; then
-    disable_service_worker
     exit 0
   fi
 
