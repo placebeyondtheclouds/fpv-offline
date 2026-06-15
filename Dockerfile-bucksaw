@@ -34,6 +34,7 @@ RUN rustup target add wasm32-unknown-unknown
 RUN cargo install trunk --locked
 
 COPY  --chown=root:root --chmod=700  build-common.sh bucksaw.sh .
+COPY  --chown=root:root  bucksaw-blackbox-log-2026.patch .
 
 RUN ./bucksaw.sh
 

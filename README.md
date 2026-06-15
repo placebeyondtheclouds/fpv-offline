@@ -90,7 +90,7 @@ just edit `.env` and restart the stack. set BETAFLIGHT_BRANCH to `master` (and i
 
 ## update the configurators and the Blackbox viewer versions
 
-`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate`
+`docker compose down -v` to delete all volumes and `docker compose up --build --force-recreate --no-cache`, or `docker compose build --no-cache bucksaw` etc
 
 ## cleanup
 
