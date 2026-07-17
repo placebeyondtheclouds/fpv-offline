@@ -4,7 +4,7 @@ Creates an offline environment with apps needed for setting up an FPV quad.
 
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
 - downloads Bluejay firmware HEXes for the target and PWM set in `.env`
-- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator, the Blackbox viewer, AM32 Configurator and Bucksaw, builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
+- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator, the Blackbox viewer, AM32 Configurator and Bucksaw (was patched to enable 202x.x blackbox logs), builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
   <br><img src="./image.png" alt="screenshot" width="50%">
 
