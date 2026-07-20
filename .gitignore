@@ -405,4 +405,5 @@ fw/*
 ExpressLRS-Configurator
 ExpressLRS
 
-./elrs-firmware-src
+elrs-firmware-src/*
+elrs-firmware-src/MurmurLRS/*
