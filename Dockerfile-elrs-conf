@@ -1,0 +1,206 @@
+ARG NODE_VERSION=24-bookworm
+ARG GUACAMOLE_VERSION=1.6.0
+
+FROM node:${NODE_VERSION} AS elrs-desktop
+
+ARG ELRS_CFG_SRC_REPOSITORY
+ARG ELRS_CFG_REF
+ARG APP_UID=1000
+ARG APP_GID=1000
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG ALL_PROXY
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    DISPLAY=:0 \
+    HOME=/home/elrs \
+    ELECTRON_DISABLE_SANDBOX=1 \
+    ELECTRON_ENABLE_LOGGING=1 \
+    NO_AT_BRIDGE=1
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    ca-certificates git python3 python3-venv python3-pip build-essential pkg-config \
+    xvfb x11vnc x11-utils openbox dbus-x11 tini sudo procps \
+    libasound2 libatk-bridge2.0-0 libatk1.0-0 libcups2 libdbus-1-3 \
+    libdrm2 libgbm1 libgtk-3-0 libnss3 libnspr4 libx11-xcb1 \
+    libxcomposite1 libxdamage1 libxfixes3 libxkbcommon0 libxrandr2 \
+    libxshmfence1 libxtst6 libu2f-udev libvulkan1 xdg-utils \
+    fonts-dejavu-core fonts-liberation \
+ && rm -rf /var/lib/apt/lists/*
+
+# The official Node image normally already contains the "node" user and group
+# with UID/GID 1000. Reuse and rename accounts occupying the requested IDs
+# instead of attempting to create duplicate UID/GID values.
+RUN set -eux; \
+    existing_group="$(getent group "${APP_GID}" | cut -d: -f1 || true)"; \
+    if [ -n "${existing_group}" ]; then \
+        if [ "${existing_group}" != "elrs" ]; then \
+            groupmod --new-name elrs "${existing_group}"; \
+        fi; \
+    else \
+        groupadd --gid "${APP_GID}" elrs; \
+    fi; \
+    existing_user="$(getent passwd "${APP_UID}" | cut -d: -f1 || true)"; \
+    if [ -n "${existing_user}" ]; then \
+        if [ "${existing_user}" != "elrs" ]; then \
+            usermod \
+                --login elrs \
+                --home /home/elrs \
+                --move-home \
+                --gid "${APP_GID}" \
+                --shell /bin/bash \
+                "${existing_user}"; \
+        else \
+            usermod \
+                --home /home/elrs \
+                --gid "${APP_GID}" \
+                --shell /bin/bash \
+                elrs; \
+        fi; \
+    else \
+        useradd \
+            --uid "${APP_UID}" \
+            --gid "${APP_GID}" \
+            --create-home \
+            --shell /bin/bash \
+            elrs; \
+    fi; \
+    mkdir -p /opt/elrs /firmware /home/elrs/.vnc; \
+    chown -R elrs:elrs /opt/elrs /firmware /home/elrs
+
+# corepack may need to write into root-owned Node installation directories.
+RUN corepack enable
+
+COPY --chown=elrs:elrs elrs-conf.sh /usr/local/bin/elrs-conf.sh
+RUN chmod 0755 /usr/local/bin/elrs-conf.sh
+
+USER elrs
+WORKDIR /opt/elrs
+
+RUN test -n "${ELRS_CFG_SRC_REPOSITORY}" \
+ && git clone \
+      --branch "${ELRS_CFG_REF}" \
+      --depth 1 \
+      "${ELRS_CFG_SRC_REPOSITORY}" \
+      . \
+ && yarn install --frozen-lockfile
+
+EXPOSE 5900
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/elrs-conf.sh"]
+
+
+# Produces a PostgreSQL image whose first startup initializes Guacamole's schema.
+FROM guacamole/guacamole:${GUACAMOLE_VERSION} AS guacamole-schema
+
+RUN /opt/guacamole/bin/initdb.sh --postgresql \
+    > /tmp/guacamole-initdb.sql
+
+
+FROM postgres:16-bookworm AS guac-db
+
+COPY --from=guacamole-schema \
+    /tmp/guacamole-initdb.sql \
+    /docker-entrypoint-initdb.d/001-guacamole.sql
+
+
+RUN cat > /docker-entrypoint-initdb.d/002-elrs-connection.sh <<'SCRIPT'
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+: "${GUAC_VNC_PASSWORD:?GUAC_VNC_PASSWORD must be set}"
+
+cat > /tmp/002-elrs-connection.sql <<'SQL'
+INSERT INTO guacamole_connection (
+    connection_name,
+    protocol,
+    parent_id,
+    max_connections,
+    max_connections_per_user
+)
+SELECT
+    'ELRS Configurator',
+    'vnc',
+    NULL,
+    NULL,
+    NULL
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM guacamole_connection
+    WHERE connection_name = 'ELRS Configurator'
+      AND parent_id IS NULL
+);
+
+INSERT INTO guacamole_connection_parameter (
+    connection_id,
+    parameter_name,
+    parameter_value
+)
+SELECT
+    connection_id,
+    parameter_name,
+    parameter_value
+FROM (
+    SELECT 'hostname' AS parameter_name, 'elrs-conf' AS parameter_value
+    UNION ALL
+    SELECT 'port', '5900'
+    UNION ALL
+    SELECT 'password', :'vnc_password'
+    UNION ALL
+    SELECT 'color-depth', '24'
+    UNION ALL
+    SELECT 'resize-method', 'display-update'
+) parameters
+CROSS JOIN LATERAL (
+    SELECT connection_id
+    FROM guacamole_connection
+    WHERE connection_name = 'ELRS Configurator'
+      AND parent_id IS NULL
+    ORDER BY connection_id
+    LIMIT 1
+) connection
+ON CONFLICT (connection_id, parameter_name)
+DO UPDATE SET parameter_value = EXCLUDED.parameter_value;
+
+INSERT INTO guacamole_connection_permission (
+    entity_id,
+    connection_id,
+    permission
+)
+SELECT
+    entity.entity_id,
+    connection.connection_id,
+    permission.permission
+FROM guacamole_entity entity
+CROSS JOIN LATERAL (
+    SELECT connection_id
+    FROM guacamole_connection
+    WHERE connection_name = 'ELRS Configurator'
+      AND parent_id IS NULL
+    ORDER BY connection_id
+    LIMIT 1
+) connection
+CROSS JOIN (
+    VALUES
+        ('READ'::guacamole_object_permission_type),
+        ('UPDATE'::guacamole_object_permission_type),
+        ('DELETE'::guacamole_object_permission_type),
+        ('ADMINISTER'::guacamole_object_permission_type)
+) permission(permission)
+WHERE entity.name = 'guacadmin'
+  AND entity.type = 'USER'
+ON CONFLICT DO NOTHING;
+SQL
+
+psql \
+    --username "$POSTGRES_USER" \
+    --dbname "$POSTGRES_DB" \
+    --set=ON_ERROR_STOP=1 \
+    --set=vnc_password="$GUAC_VNC_PASSWORD" \
+    --file=/tmp/002-elrs-connection.sql
+
+rm -f /tmp/002-elrs-connection.sql
+SCRIPT
+
+RUN chmod 0755 /docker-entrypoint-initdb.d/002-elrs-connection.sh
