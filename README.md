@@ -4,7 +4,7 @@ Creates an offline environment with apps needed for setting up an FPV quad.
 
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
 - downloads Bluejay firmware HEXes for the target and PWM set in `.env`
-- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator (latest master branch and any other branch set in the .env), the Blackbox viewer, AM32 Configurator and Bucksaw (was patched to enable 202x.x blackbox logs), builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
+- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator (latest master branch and any other branch set in the .env), the Blackbox viewer, AM32 Configurator, ELRS configurator electron app in guacamole (for compiling modified ELRS firmware), builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
 - elrs configurator app to compile elrs firmware: `Electron → Xvfb desktop → internal VNC → guacd → Guacamole web UI`
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
   <br><img src="./image.png" alt="screenshot" width="50%">
@@ -55,6 +55,8 @@ a quote from `./src/main/target/common_pre.h` on [extra flags](https://www.betaf
 ## download source code of ELRS fork with encryption
 
 `mkdir -p elrs-firmware-src && cd elrs-firmware-src && git clone --branch master  --depth 1 https://github.com/PotatoSpudowski/MurmurLRS.git`
+
+host directory `./elrs-firmware-src` is mounted in ELRS configurator container as `/firmware` and can be used to access ELRS source code and to retreive the binaries compiled inside the container
 
 ## (optional) disable calling home
 
