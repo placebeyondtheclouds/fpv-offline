@@ -31,6 +31,10 @@
         icon: nginx.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:90
         description: "WebAssembly app"
+    - ELRS Configurator:
+        icon: guacamole.png
+        href: http://{{HOMEPAGE_VAR_HOST_IP}}:91
+        description: "guacadmin:guacadmin, expert mode, /firmware/MurmurLRS/src"
 
 - Files:
     - download the files:

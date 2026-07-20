@@ -268,6 +268,93 @@ services:
       - ./fw:/usr/share/nginx/html:ro
     restart: unless-stopped
 
+  elrs-conf:
+    build:
+      context: .
+      target: elrs-desktop
+      dockerfile: Dockerfile-elrs-conf
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        ALL_PROXY: ${ALL_PROXY}
+        ELRS_CFG_SRC_REPOSITORY: ${ELRS_CFG_SRC_REPOSITORY}
+        ELRS_CFG_REF: ${ELRS_CFG_REF:-master}
+        APP_UID: ${APP_UID:-1000}
+        APP_GID: ${APP_GID:-1000}
+    restart: unless-stopped
+    environment:
+      VNC_PASSWORD: ${VNC_PASSWORD}
+      SCREEN_WIDTH: ${SCREEN_WIDTH:-1600}
+      SCREEN_HEIGHT: ${SCREEN_HEIGHT:-900}
+      SCREEN_DEPTH: ${SCREEN_DEPTH:-24}
+      DISPLAY: ":0"
+    volumes:
+      - ${ELRS_FIRMWARE_SOURCE_DIR}:/firmware:rw
+      - elrs-conf-home:/home/elrs
+    shm_size: 1gb
+    networks:
+      - guac-internal
+    expose:
+      - "5900"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'xdpyinfo -display "$${DISPLAY:-:0}" >/dev/null 2>&1 && pgrep -x x11vnc >/dev/null'
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    depends_on:
+      guacamole:
+        condition: service_started
+
+  guac-db:
+    build:
+      context: .
+      target: guac-db
+      dockerfile: Dockerfile-elrs-conf
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: guacamole_db
+      POSTGRES_USER: guacamole_user
+      POSTGRES_PASSWORD: ${GUAC_DB_PASSWORD}
+      GUAC_VNC_PASSWORD: ${VNC_PASSWORD}
+    volumes:
+      - guac-db:/var/lib/postgresql/data
+    networks:
+      - guac-internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U guacamole_user -d guacamole_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  guacd:
+    image: guacamole/guacd:1.6.0
+    restart: unless-stopped
+    networks:
+      - guac-internal
+
+  guacamole:
+    image: guacamole/guacamole:1.6.0
+    restart: unless-stopped
+    depends_on:
+      guac-db:
+        condition: service_healthy
+      guacd:
+        condition: service_started
+    environment:
+      GUACD_HOSTNAME: guacd
+      POSTGRESQL_HOSTNAME: guac-db
+      POSTGRESQL_DATABASE: guacamole_db
+      POSTGRESQL_USERNAME: guacamole_user
+      POSTGRESQL_PASSWORD: ${GUAC_DB_PASSWORD}
+      WEBAPP_CONTEXT: ROOT
+    ports:
+      - "${GUACAMOLE_PORT}:8080"
+    networks:
+      - guac-internal
+
 volumes:
   homepage_data:
     driver: local
@@ -287,3 +374,11 @@ volumes:
     driver: local
   bb_data:
     driver: local
+  elrs-conf-home:
+    driver: local
+  guac-db:
+    driver: local
+
+networks:
+  guac-internal:
+    driver: bridge
