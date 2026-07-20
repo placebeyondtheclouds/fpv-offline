@@ -27,10 +27,10 @@
         icon: npm.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:84
         description:
-    - Bucksaw:
-        icon: nginx.png
-        href: http://{{HOMEPAGE_VAR_HOST_IP}}:90
-        description: "WebAssembly app"
+    # - Bucksaw:
+    #     icon: nginx.png
+    #     href: http://{{HOMEPAGE_VAR_HOST_IP}}:90
+    #     description: "WebAssembly app"
     - ELRS Configurator:
         icon: guacamole.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:91
