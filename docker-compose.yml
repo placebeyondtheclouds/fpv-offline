@@ -283,6 +283,9 @@ services:
         APP_GID: ${APP_GID:-1000}
     restart: unless-stopped
     environment:
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      ALL_PROXY: ${ALL_PROXY}
       VNC_PASSWORD: ${VNC_PASSWORD}
       SCREEN_WIDTH: ${SCREEN_WIDTH:-1600}
       SCREEN_HEIGHT: ${SCREEN_HEIGHT:-900}

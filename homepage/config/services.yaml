@@ -34,7 +34,7 @@
     - ELRS Configurator:
         icon: guacamole.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:91
-        description: "guacadmin:guacadmin, expert mode, /firmware/MurmurLRS/src"
+        description: "guacadmin:guacadmin, expert mode, select local source: /firmware/MurmurLRS/src . the compiled firmware will be in host's elrs-firmware-src/MurmurLRS/src/.pio/build/"
 
 - Files:
     - download the files:
