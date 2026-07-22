@@ -52,11 +52,13 @@ a quote from `./src/main/target/common_pre.h` on [extra flags](https://www.betaf
 
 `git clone https://github.com/placebeyondtheclouds/fpv-offline.git && cd fpv-offline && chmod 777 fw`
 
-## download source code of ELRS fork with encryption
+## ELRS fork with packet encryption
+
+[Such an imressive piece of work!](https://github.com/PotatoSpudowski/MurmurLRS.git)
 
 `mkdir -p elrs-firmware-src && cd elrs-firmware-src && git clone --branch master  --depth 1 https://github.com/PotatoSpudowski/MurmurLRS.git`
 
-host directory `./elrs-firmware-src` is mounted in ELRS configurator container as `/firmware` and can be used to access ELRS source code and to retreive the binaries compiled inside the container
+host directory `./elrs-firmware-src` is mounted in ELRS configurator container as `/firmware` and can be used to access ELRS source code from inside the container. the binaries compiled inside the container are in src/.pio/build. I had to flash the official elrs4 before flashing murmurlrs over wifi, otherwise there were problems with ESP8285 receiver.
 
 ## (optional) disable calling home
 

@@ -31,7 +31,7 @@
     #     icon: nginx.png
     #     href: http://{{HOMEPAGE_VAR_HOST_IP}}:90
     #     description: "WebAssembly app"
-    - ELRS Configurator:
+    - ELRS Configurator (mainly for compiling MurmurLRS):
         icon: guacamole.png
         href: http://{{HOMEPAGE_VAR_HOST_IP}}:91
         description: "guacadmin:guacadmin, expert mode, select local source: /firmware/MurmurLRS/src . the compiled firmware will be in host's elrs-firmware-src/MurmurLRS/src/.pio/build/"
