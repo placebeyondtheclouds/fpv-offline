@@ -58,7 +58,22 @@ a quote from `./src/main/target/common_pre.h` on [extra flags](https://www.betaf
 
 `mkdir -p elrs-firmware-src && cd elrs-firmware-src && git clone --branch master  --depth 1 https://github.com/PotatoSpudowski/MurmurLRS.git`
 
-host directory `./elrs-firmware-src` is mounted in ELRS configurator container as `/firmware` and can be used to access ELRS source code from inside the container. the binaries compiled inside the container are in src/.pio/build. I had to flash the official elrs4 before flashing murmurlrs over wifi, otherwise there were problems with ESP8285 receiver.
+**the firmware must be compiled with the binding phrase set, otherwise it will not turn on the encryption**. binding phrase set after flashing is not enabling the encryption. pretty easy to overlook and is very dangerous from the OPSEC perspective. add random UID to `src/user_defines.txt` just in case and verify that it is there after flashing (which means the encryption was enabled at build)
+
+```
+-DMURMUR_ENCRYPT
+-DMY_UID=11,22,33,44,55,66
+```
+
+or
+
+```
+-DMY_BINDING_PHRASE="thephrase"
+```
+
+It is better to use the regular ELRS configurator software and flash through serial and Betaflight passthrough. set only binding phrase and regulatory domain, do not change other options.
+
+if flashing with this repo tools, host directory `./elrs-firmware-src` is mounted in ELRS configurator container as `/firmware` and can be used to access ELRS source code from inside the container. the binaries compiled inside the container are in src/.pio/build. I had to flash the official elrs4 before flashing murmurlrs over wifi, otherwise there were problems with ESP8285 receiver.
 
 ## (optional) disable calling home
 
