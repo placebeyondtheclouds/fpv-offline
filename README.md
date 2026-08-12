@@ -4,7 +4,7 @@ Creates an offline environment with apps needed for setting up an FPV quad.
 
 - clones Betaflight firmware repo and compiles the firmware for the target set in `.env`
 - downloads Bluejay firmware HEXes for the target and PWM set in `.env`
-- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator (latest master branch and any other branch set in the .env), the Blackbox viewer, AM32 Configurator, ELRS configurator electron app in guacamole (for compiling modified ELRS firmware), builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
+- clones the reps of ELRS web flasher (and downloads all the artifacts), ESC Configurator, Betaflight Configurator (latest master branch and any other branch set in the .env), the Blackbox viewer, AM32 Configurator, ELRS configurator electron app in guacamole (for compiling modified ELRS firmware), ~~Bucksaw,~~ builds them at container image build stage. Everything is downloaded and baked into the images so the consequent startups are fast.
 - elrs configurator app to compile elrs firmware: `Electron → Xvfb desktop → internal VNC → guacd → Guacamole web UI`
 - starts the `homepage` container for a convenient [starting page](http://localhost:81)
   <br><img src="./image.png" alt="screenshot" width="50%">
@@ -54,11 +54,18 @@ a quote from `./src/main/target/common_pre.h` on [extra flags](https://www.betaf
 
 ## ELRS fork with packet encryption
 
-[Such an imressive piece of work!](https://github.com/PotatoSpudowski/MurmurLRS.git)
+[MurmurLRS is such an impressive piece of work!](https://github.com/PotatoSpudowski/MurmurLRS) there is also another project called [PrivacyLRS](https://github.com/sensei-hacker/PrivacyLRS)
 
-`mkdir -p elrs-firmware-src && cd elrs-firmware-src && git clone --branch master  --depth 1 https://github.com/PotatoSpudowski/MurmurLRS.git`
+```bash
+mkdir -p elrs-firmware-src && cd elrs-firmware-src
+git clone --branch master  --depth 1 https://github.com/PotatoSpudowski/MurmurLRS.git
+cd ..
+mkdir -p ./elrs-firmware-src/MurmurLRS/src/.pio/build
+```
 
-**the firmware must be compiled with the binding phrase set, otherwise it will not turn on the encryption**. binding phrase set after flashing is not enabling the encryption. pretty easy to overlook and is very dangerous from the OPSEC perspective. add random UID to `src/user_defines.txt` just in case and verify that it is there after flashing (which means the encryption was enabled at build)
+if not using this firmware (one should), comment out `- ./elrs-firmware-src/MurmurLRS/src/.pio/build:/usr/share/nginx/html/murmurlrs-build:ro` in the docker-compose.yml
+
+**the firmware must be compiled with the binding phrase set, otherwise it will not turn on the encryption**. binding phrase set after flashing is not enabling the encryption. pretty easy to overlook and is very dangerous from the OPSEC perspective. add a random UID in decimals each smaller than 255 (FF in hex) to `src/user_defines.txt` just in case and verify that it is there after flashing (which means the encryption was enabled at build)
 
 ```
 -DMURMUR_ENCRYPT
@@ -99,15 +106,6 @@ navigate to **http://localhost:81** in Chrome browser
 
 the firmware files are in `./fw` and are served as an open directory (**be aware**) at http://localhost:86
 
-Betaflight Configurator is available in two builds:
-
-- tagged version from `.env`: http://localhost:82
-- `master` branch build: http://localhost:88
-
-AM32 Configurator `master` branch build is available at http://localhost:89
-
-Bucksaw is available at http://localhost:90
-
 ## update Betaflight or Bluejay firmware targets and options
 
 just edit `.env` and restart the stack. set BETAFLIGHT_BRANCH to `master` (and ignore the version) to build the latest version of the firmware
@@ -128,7 +126,7 @@ docker system prune --force
 
 to access the services from another machine use ssh port forwarding:
 
-`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 88:localhost:88 -L 89:localhost:89 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
+`ssh -N -L 81:localhost:81 -L 82:localhost:82 -L 83:localhost:83 -L 84:localhost:84 -L 85:localhost:85 -L 86:localhost:86 -L 88:localhost:88 -L 89:localhost:89 -L 90:localhost:90 -L 91:localhost:91 192.168.100.175` where 192.168.100.175 is the machine where this stack is running
 
 ## todo
 

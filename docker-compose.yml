@@ -265,7 +265,8 @@ services:
       - "86:80"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./fw:/usr/share/nginx/html:ro
+      - ./fw:/usr/share/nginx/html/fw:ro
+      - ./elrs-firmware-src/MurmurLRS/src/.pio/build:/usr/share/nginx/html/murmurlrs-build:ro
     restart: unless-stopped
 
   elrs-conf:
